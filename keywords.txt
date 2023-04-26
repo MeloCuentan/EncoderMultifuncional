@@ -1,0 +1,26 @@
+#########
+# CLASE #
+#########
+EncoderMultifuncional   KEYWORD1
+
+#######################
+# METODOS Y FUNCIONES #
+#######################
+detectarFlancoBajada    KEYWORD2
+inicializar             KEYWORD2
+actualizarBits          KEYWORD2
+esPresionado            KEYWORD2
+obtenerValor            KEYWORD2
+asignarValor            KEYWORD2
+cambiarLimites          KEYWORD2
+_cambiarValor           KEYWORD2
+_read8                  KEYWORD2
+
+##############
+# CONSTANTES #
+##############
+PIN_A                   LITERAL1
+PIN_B                   LITERAL1
+PIN_C                   LITERAL1
+PIN_D                   LITERAL1
+PIN_SW                  LITERAL1
