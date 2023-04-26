@@ -217,23 +217,40 @@ uint8_t EncoderMultifuncional::_read8()
  */
 void EncoderMultifuncional::_cambiarValor(bool accion)
 {
-  if (_bucle &&
-      ((_valorEncoder == _valorMaximo && accion == _suma) || (_valorEncoder == _valorMinimo && accion == _resta)))
+  if (_bucle == true)
   {
-    _valorEncoder = _valorMinimo;
-  }
-  else if (accion == _suma)
-  {
-    if (_valorEncoder < _valorMaximo)
+    if (accion == _suma)
     {
-      _valorEncoder++;
+      if (_valorEncoder < _valorMaximo)
+      {
+        _valorEncoder++;
+      }
+      else
+      {
+        _valorEncoder = _valorMinimo;
+      }
+    }
+
+    if (accion == _resta)
+    {
+      if (_valorEncoder > _valorMinimo)
+      {
+        _valorEncoder--;
+      }
+      else
+      {
+        _valorEncoder = _valorMaximo;
+      }
     }
   }
-  else if (accion == _resta)
+  else if (_bucle == false)
   {
-    if (_valorEncoder > _valorMinimo)
-    {
-      _valorEncoder--;
+    if (accion == _suma){
+      if (_valorEncoder < _valorMaximo) _valorEncoder++;
+
+    }
+    if (accion == _resta) {
+      if (_valorEncoder > _valorMinimo) _valorEncoder--;
     }
   }
 }
