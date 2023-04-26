@@ -34,12 +34,12 @@ private:
   static const uint8_t PULSADO = 1;
   static const uint8_t LIBRE = 2;
   static const uint8_t NULO = 0;
-  uint8_t _direccion_I2C;                    // Dirección I2C del PCF8574
-  uint8_t _estadoActual;                     // Estado actual de los  botones
-  uint8_t _estadoAnterior;                   // Estado anterior de los botones
-  int16_t _valorEncoder;                     // Valor numérico del encoder
-  uint8_t _bitsActuales;                     // Byte de todas las entradas medidas
-  uint8_t _bitsAnteriores;                   // Byte de todas las entradas medidas anteriores
+  uint8_t _direccion_I2C;  // Dirección I2C del PCF8574
+  uint8_t _estadoActual;   // Estado actual de los  botones
+  uint8_t _estadoAnterior; // Estado anterior de los botones
+  int16_t _valorEncoder;   // Valor numérico del encoder
+  uint8_t _bitsActuales;   // Byte de todas las entradas medidas
+  uint8_t _bitsAnteriores; // Byte de todas las entradas medidas anteriores
   bool _flancoPines[_totalPulsadores] = {
       // Establecemos la detección de todos los flancos como desactivados por defecto
       false, // PIN_A
@@ -48,13 +48,12 @@ private:
       false, // PIN_D
       false  // PIN_SW
   };
-  uint8_t _estadoPines[_totalPulsadores] = {LIBRE, LIBRE, LIBRE, LIBRE, LIBRE};
-  bool _lecturaEncoder;          // Habilita la lectura del encoder hasta que llegue al reposo
-  bool _bucle = false;           // Activa el modo bucle del valor numérico del encoder
-  bool _suma = true;             // Suma el valor
-  bool _resta = false;           // Resta el valor
-  int16_t _valorMinimo = -32768; // Valor mínimo de un int16_t
-  int16_t _valorMaximo = 32767;  // Valor máximo de un int16_t
+  bool _lecturaEncoder;            // Habilita la lectura del encoder hasta que llegue al reposo
+  bool _bucle = false;             // Activa el modo bucle del valor numérico del encoder
+  bool _suma = true;               // Suma el valor
+  bool _resta = false;             // Resta el valor
+  int16_t _valorMinimo = -32768;   // Valor mínimo de un int16_t
+  int16_t _valorMaximo = 32767;    // Valor máximo de un int16_t
   void _cambiarValor(bool accion); // Función que cambia el valor del encoder
   uint8_t _read8();                // Función para leer todos los pines del PCF
 };

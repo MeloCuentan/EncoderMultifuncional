@@ -80,6 +80,7 @@ bool EncoderMultifuncional::esPresionado(uint8_t pin)
   if (pin >= PIN_A && pin <= PIN_SW)
   {
     uint8_t ajustePin = pin - 2;
+
     if (_flancoPines[ajustePin] == false) // si no está activada la detección del flanco de ese pin, se devuelve el valor mientras esté pulsado
     {
       return !(_estadoActual & (1 << pin));
@@ -102,8 +103,8 @@ bool EncoderMultifuncional::esPresionado(uint8_t pin)
 /**
  * @brief Detección de cambio de flanco de cada pulsador
  *
- * @param pin se le pasará el número de pin, entendiendo que PIN_A = 0, PIN_B = 1, PIN_C = 2, PIN_D = 3, PIN_SW = 4
- * @return int8_t devuelve el cambio de pin o NULO sin o ha cambiado
+ * @param pin Se le pasará el número de pin, entendiendo que PIN_A = 0, PIN_B = 1, PIN_C = 2, PIN_D = 3, PIN_SW = 4
+ * @return int8_t Devuelve el cambio de pin o NULO sin o ha cambiado
  */
 int8_t EncoderMultifuncional::detectarFlancos(int8_t pin)
 {
@@ -116,6 +117,7 @@ int8_t EncoderMultifuncional::detectarFlancos(int8_t pin)
     if (estadoPinActual != estadoPinAnterior) // Si son diferentes
     {
       _estadoAnterior = _estadoActual; // Actualizamos el valor
+
       if (!(_estadoActual & (1 << pin)) == true)
       {
         return PULSADO;
@@ -126,6 +128,7 @@ int8_t EncoderMultifuncional::detectarFlancos(int8_t pin)
       }
     }
   }
+
   return NULO;
 }
 
@@ -206,6 +209,7 @@ uint8_t EncoderMultifuncional::_read8()
 {
   Wire.requestFrom(_direccion_I2C, (uint8_t)1);
   uint8_t value = Wire.read();
+
   return value;
 }
 
@@ -245,12 +249,15 @@ void EncoderMultifuncional::_cambiarValor(bool accion)
   }
   else if (_bucle == false)
   {
-    if (accion == _suma){
-      if (_valorEncoder < _valorMaximo) _valorEncoder++;
-
+    if (accion == _suma)
+    {
+      if (_valorEncoder < _valorMaximo)
+        _valorEncoder++;
     }
-    if (accion == _resta) {
-      if (_valorEncoder > _valorMinimo) _valorEncoder--;
+    if (accion == _resta)
+    {
+      if (_valorEncoder > _valorMinimo)
+        _valorEncoder--;
     }
   }
 }
@@ -262,10 +269,12 @@ void EncoderMultifuncional::_cambiarValor(bool accion)
 void EncoderMultifuncional::actualizarBits()
 {
   _estadoActual = _read8();
-  uint8_t _bitsActuales = _estadoActual & 0b00000011;         // Aplicamos una máscara para quedarnos solo con los dos últimos valores (pines CLK y DT)
+  uint8_t _bitsActuales = _estadoActual & 0b00000011; // Aplicamos una máscara para quedarnos solo con los dos últimos valores (pines CLK y DT)
+
   if (_bitsActuales != 0b00000011 && _lecturaEncoder == true) // Si no está en reposo
   {
     _lecturaEncoder = false;
+
     if (_bitsActuales != _bitsAnteriores)
     {
       if (_bitsActuales == 0b00000010) // Si se ha actiado el pin DT
@@ -278,6 +287,7 @@ void EncoderMultifuncional::actualizarBits()
       }
     }
   }
+
   if (_bitsActuales == 0b00000011) // Cuando llegue al reposo
   {
     _lecturaEncoder = true;
