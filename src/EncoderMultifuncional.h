@@ -5,10 +5,10 @@
 #include <Wire.h>
 
 // Asignación del número de los pines
-static const uint8_t PIN_A = 2;  // Pin P2 del PCF8574
-static const uint8_t PIN_B = 3;  // Pin P3 del PCF8574
-static const uint8_t PIN_C = 4;  // Pin P4 del PCF8574
-static const uint8_t PIN_D = 5;  // Pin P5 del PCF8574
+static const uint8_t PIN_A = 4;  // Pin P2 del PCF8574
+static const uint8_t PIN_B = 5;  // Pin P3 del PCF8574
+static const uint8_t PIN_C = 2;  // Pin P4 del PCF8574
+static const uint8_t PIN_D = 3;  // Pin P5 del PCF8574
 static const uint8_t PIN_SW = 6; // Pin P6 del PCF8574
 static const uint8_t PRESIONADO = 1;
 static const uint8_t LIBERADO = 2;
@@ -30,17 +30,19 @@ public:
   void cambiarLimites(int16_t valorMinimo, int16_t valorMaximo, int16_t valorEncoder);
 
 private:
-  static const uint8_t _totalPulsadores = 5; // Total de pulsadores que tiene el encoder
-  static const uint8_t PULSADO = 1;
-  static const uint8_t LIBRE = 2;
-  static const uint8_t NULO = 0;
+  static const uint8_t _TOTAL_PULSADORES = 5; // Total de pulsadores que tiene el encoder
+  static const uint8_t _PULSADO = 1;
+  static const uint8_t _LIBRE = 2;
+  static const uint8_t _NULO = 0;
+  static const uint8_t _VALOR_MINIMO_PIN = PIN_C;
+  static const uint8_t _VALOR_MAXIMO_PIN = PIN_SW;
   uint8_t _direccion_I2C;  // Dirección I2C del PCF8574
   uint8_t _estadoActual;   // Estado actual de los  botones
   uint8_t _estadoAnterior; // Estado anterior de los botones
   int16_t _valorEncoder;   // Valor numérico del encoder
   uint8_t _bitsActuales;   // Byte de todas las entradas medidas
   uint8_t _bitsAnteriores; // Byte de todas las entradas medidas anteriores
-  bool _flancoPines[_totalPulsadores] = {
+  bool _flancoPines[_TOTAL_PULSADORES] = {
       // Establecemos la detección de todos los flancos como desactivados por defecto
       false, // PIN_A
       false, // PIN_B

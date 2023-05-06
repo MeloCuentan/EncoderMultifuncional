@@ -4,41 +4,41 @@
 /**
  * @brief Constructor básico
  *
- * @param direccion_I2C Dirección I2C del PCF8574
+ * @param pDireccion_I2C Dirección I2C del PCF8574
  */
-EncoderMultifuncional::EncoderMultifuncional(uint8_t direccion_I2C)
+EncoderMultifuncional::EncoderMultifuncional(uint8_t pDireccion_I2C)
 {
-  _direccion_I2C = direccion_I2C;
+  _direccion_I2C = pDireccion_I2C;
 }
 
 /**
  * @brief Constructor intermedio
  *
- * @param direccion_I2C Dirección I2C del PCF8574
- * @param valorMinimo Asignamos el valor mínimo que devolverá el encoder
- * @param valorMaximo Asignamos el valor máximo que devolverá el encoder
+ * @param pDireccion_I2C Dirección I2C del PCF8574
+ * @param pValorMinimo Asignamos el valor mínimo que devolverá el encoder
+ * @param pValorMaximo Asignamos el valor máximo que devolverá el encoder
  */
-EncoderMultifuncional::EncoderMultifuncional(uint8_t direccion_I2C, int16_t valorMinimo, int16_t valorMaximo)
+EncoderMultifuncional::EncoderMultifuncional(uint8_t pDireccion_I2C, int16_t pValorMinimo, int16_t pValorMaximo)
 {
-  _direccion_I2C = direccion_I2C;
-  _valorMinimo = valorMinimo;
-  _valorMaximo = valorMaximo;
+  _direccion_I2C = pDireccion_I2C;
+  _valorMinimo = pValorMinimo;
+  _valorMaximo = pValorMaximo;
 }
 
 /**
  * @brief Constructor completo
  *
- * @param direccion_I2C Dirección I2C del PCF8574
- * @param valorMinimo Asignamos el valor mínimo que devolverá el encoder
- * @param valorMaximo Asignamos el valor máximo que devolverá el encoder
- * @param bucle Si es true, activamos el modo bucle de los valores del encoder
+ * @param pDireccion_I2C Dirección I2C del PCF8574
+ * @param pValorMinimo Asignamos el valor mínimo que devolverá el encoder
+ * @param pValorMaximo Asignamos el valor máximo que devolverá el encoder
+ * @param pBucle Si es true, activamos el modo bucle de los valores del encoder
  */
-EncoderMultifuncional::EncoderMultifuncional(uint8_t direccion_I2C, int16_t valorMinimo, int16_t valorMaximo, bool bucle)
+EncoderMultifuncional::EncoderMultifuncional(uint8_t pDireccion_I2C, int16_t pValorMinimo, int16_t pValorMaximo, bool pBucle)
 {
-  _direccion_I2C = direccion_I2C;
-  _valorMinimo = valorMinimo;
-  _valorMaximo = valorMaximo;
-  _bucle = bucle;
+  _direccion_I2C = pDireccion_I2C;
+  _valorMinimo = pValorMinimo;
+  _valorMaximo = pValorMaximo;
+  _bucle = pBucle;
 }
 
 /**
@@ -63,7 +63,7 @@ void EncoderMultifuncional::inicializar()
  */
 void EncoderMultifuncional::detectarFlancoBajada(uint8_t pin)
 {
-  if (pin >= PIN_A && pin <= PIN_SW)
+  if (pin >= _VALOR_MINIMO_PIN && pin <= _VALOR_MAXIMO_PIN)
   {
     uint8_t ajustePin = pin - 2;
     _flancoPines[ajustePin] = true;
@@ -77,7 +77,7 @@ void EncoderMultifuncional::detectarFlancoBajada(uint8_t pin)
  */
 bool EncoderMultifuncional::esPresionado(uint8_t pin)
 {
-  if (pin >= PIN_A && pin <= PIN_SW)
+  if (pin >= _VALOR_MINIMO_PIN && pin <= _VALOR_MAXIMO_PIN)
   {
     uint8_t ajustePin = pin - 2;
 
@@ -108,7 +108,7 @@ bool EncoderMultifuncional::esPresionado(uint8_t pin)
  */
 int8_t EncoderMultifuncional::detectarFlancos(int8_t pin)
 {
-  if (pin >= PIN_A && pin <= PIN_SW)
+  if (pin >= _VALOR_MINIMO_PIN && pin <= _VALOR_MAXIMO_PIN)
   {
     uint8_t mascara = (1 << pin);                      // Creamos la máscara para filtrar el bit que queremos utilizar
     uint8_t estadoPinActual = _estadoActual & mascara; // Aplicamos la máscara y guardamos en una nueva variable
@@ -120,16 +120,16 @@ int8_t EncoderMultifuncional::detectarFlancos(int8_t pin)
 
       if (!(_estadoActual & (1 << pin)) == true)
       {
-        return PULSADO;
+        return _PULSADO;
       }
       else
       {
-        return LIBRE;
+        return _LIBRE;
       }
     }
   }
 
-  return NULO;
+  return _NULO;
 }
 
 /**
