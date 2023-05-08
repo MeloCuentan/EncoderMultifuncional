@@ -264,33 +264,42 @@ void EncoderMultifuncional::_cambiarValor(bool accion)
 
 /**
  * @brief Función encargada de leer y actualizar los pines del PCF y comprobar el movimiento del encoder
- *
+ * 
  */
 void EncoderMultifuncional::actualizarBits()
 {
   _estadoActual = _read8();
   uint8_t _bitsActuales = _estadoActual & 0b00000011; // Aplicamos una máscara para quedarnos solo con los dos últimos valores (pines CLK y DT)
 
-  if (_bitsActuales != 0b00000011 && _lecturaEncoder == true) // Si no está en reposo
+  if (_bitsActuales != _bitsAnteriores && _lecturaEncoder == true) // Si no está en reposo
   {
-    _lecturaEncoder = false;
+    _bitsAnteriores = _bitsActuales;
 
-    if (_bitsActuales != _bitsAnteriores)
+    if (_bitsActuales == 0b00000010) // Si se ha actiado el pin CLK
     {
-      if (_bitsActuales == 0b00000010) // Si se ha actiado el pin DT
-      {
-        _cambiarValor(_suma); // Sumamos el valor
-      }
+      if (_reposoEncoder == true)
+        _cambiarValor(_suma);
       else
-      {
-        _cambiarValor(_resta); // Restamos el valor
-      }
+        _cambiarValor(_resta);
+    }
+
+    if (_bitsActuales == 0b00000001) // Si se ha actiado el pin DT
+    {
+      if (_reposoEncoder == false)
+        _cambiarValor(_suma);
+      else
+        _cambiarValor(_resta);
     }
   }
 
-  if (_bitsActuales == 0b00000011) // Cuando llegue al reposo
+  if (_bitsActuales == 0b00000000)
   {
+    _reposoEncoder = false;
     _lecturaEncoder = true;
-    _bitsAnteriores = _bitsActuales;
+  }
+  else if (_bitsActuales == 0b00000011)
+  {
+    _reposoEncoder = true;
+    _lecturaEncoder = true;
   }
 }
