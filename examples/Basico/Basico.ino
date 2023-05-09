@@ -27,7 +27,7 @@ void loop()
     Serial.println(contador);
   }
   
-  // Si el pin está presinoado el pin, lo mostarmos en el monitor serie
+  // Si está presinoado el pin, lo mostarmos en el monitor serie
   if (encoder.esPresionado(PIN_A))
   {
     Serial.println(F("Pulsado Pin A"));
