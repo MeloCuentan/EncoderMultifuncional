@@ -19,15 +19,15 @@ public:
   EncoderMultifuncional(uint8_t pDireccion_I2C);
   EncoderMultifuncional(uint8_t pDireccion_I2C, int16_t pValorMinimo, int16_t pValorMaximo);
   EncoderMultifuncional(uint8_t pDireccion_I2C, int16_t pValorMinimo, int16_t pValorMaximo, bool pBucle);
-  void detectarFlancoBajada(uint8_t pin);
-  int8_t detectarFlancos(int8_t pin);
+  void detectarFlancoBajada(uint8_t pPin);
+  int8_t detectarFlancos(int8_t pPin);
   void inicializar();
   void actualizarBits();
-  bool esPresionado(uint8_t pin);
+  bool esPresionado(uint8_t pPin);
   int16_t obtenerValor();
-  void asignarValor(int16_t value);
-  void cambiarLimites(int16_t valorMinimo, int16_t valorMaximo);
-  void cambiarLimites(int16_t valorMinimo, int16_t valorMaximo, int16_t valorEncoder);
+  void asignarValor(int16_t pValor);
+  void cambiarLimites(int16_t pValorMinimo, int16_t pValorMaximo);
+  void cambiarLimites(int16_t pValorMinimo, int16_t pValorMaximo, int16_t pValorEncoder);
 
 private:
   static const uint8_t _TOTAL_PULSADORES = 5; // Total de pulsadores que tiene el encoder
@@ -50,14 +50,13 @@ private:
       false, // PIN_D
       false  // PIN_SW
   };
-  bool _lecturaEncoder;            // Habilita la lectura del encoder hasta que llegue al reposo
   bool _reposoEncoder;             // Variable para sabe si el reposo es 00 o 11
   bool _bucle = false;             // Activa el modo bucle del valor numérico del encoder
   bool _suma = true;               // Suma el valor
   bool _resta = false;             // Resta el valor
   int16_t _valorMinimo = -32768;   // Valor mínimo de un int16_t
   int16_t _valorMaximo = 32767;    // Valor máximo de un int16_t
-  void _cambiarValor(bool accion); // Función que cambia el valor del encoder
+  void _cambiarValor(bool pAccion); // Función que cambia el valor del encoder
   uint8_t _read8();                // Función para leer todos los pines del PCF 
 };
 

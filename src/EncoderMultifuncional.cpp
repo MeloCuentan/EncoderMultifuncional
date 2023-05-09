@@ -61,11 +61,11 @@ void EncoderMultifuncional::inicializar()
  *
  * @param pin Pasamos el nombre del pin que queremos activar (PIN_A, PIN_B, PIN_C, PIN_D, PIN_SW)
  */
-void EncoderMultifuncional::detectarFlancoBajada(uint8_t pin)
+void EncoderMultifuncional::detectarFlancoBajada(uint8_t pPin)
 {
-  if (pin >= _VALOR_MINIMO_PIN && pin <= _VALOR_MAXIMO_PIN)
+  if (pPin >= _VALOR_MINIMO_PIN && pPin <= _VALOR_MAXIMO_PIN)
   {
-    uint8_t ajustePin = pin - 2;
+    uint8_t ajustePin = pPin - 2;
     _flancoPines[ajustePin] = true;
   }
 }
@@ -75,25 +75,25 @@ void EncoderMultifuncional::detectarFlancoBajada(uint8_t pin)
  *
  * @param pin Número del pin a comprobar
  */
-bool EncoderMultifuncional::esPresionado(uint8_t pin)
+bool EncoderMultifuncional::esPresionado(uint8_t pPin)
 {
-  if (pin >= _VALOR_MINIMO_PIN && pin <= _VALOR_MAXIMO_PIN)
+  if (pPin >= _VALOR_MINIMO_PIN && pPin <= _VALOR_MAXIMO_PIN)
   {
-    uint8_t ajustePin = pin - 2;
+    uint8_t ajustePin = pPin - 2;
 
     if (_flancoPines[ajustePin] == false) // si no está activada la detección del flanco de ese pin, se devuelve el valor mientras esté pulsado
     {
-      return !(_estadoActual & (1 << pin));
+      return !(_estadoActual & (1 << pPin));
     }
 
-    uint8_t mascara = (1 << pin);                      // Creamos la máscara para filtrar el bit que queremos utilizar
+    uint8_t mascara = (1 << pPin);                     // Creamos la máscara para filtrar el bit que queremos utilizar
     uint8_t estadoPinActual = _estadoActual & mascara; // Aplicamos la máscara y guardamos en una nueva variable
     uint8_t estadoPinAnterior = _estadoAnterior & mascara;
 
     if (estadoPinActual != estadoPinAnterior) // Si son diferentes
     {
-      _estadoAnterior = _estadoActual;      // Actualizamos el valor
-      return !(_estadoActual & (1 << pin)); // Devolvemos el valor
+      _estadoAnterior = _estadoActual;       // Actualizamos el valor
+      return !(_estadoActual & (1 << pPin)); // Devolvemos el valor
     }
   }
 
@@ -106,11 +106,11 @@ bool EncoderMultifuncional::esPresionado(uint8_t pin)
  * @param pin Se le pasará el número de pin, entendiendo que PIN_A = 0, PIN_B = 1, PIN_C = 2, PIN_D = 3, PIN_SW = 4
  * @return int8_t Devuelve el cambio de pin o NULO sin o ha cambiado
  */
-int8_t EncoderMultifuncional::detectarFlancos(int8_t pin)
+int8_t EncoderMultifuncional::detectarFlancos(int8_t pPin)
 {
-  if (pin >= _VALOR_MINIMO_PIN && pin <= _VALOR_MAXIMO_PIN)
+  if (pPin >= _VALOR_MINIMO_PIN && pPin <= _VALOR_MAXIMO_PIN)
   {
-    uint8_t mascara = (1 << pin);                      // Creamos la máscara para filtrar el bit que queremos utilizar
+    uint8_t mascara = (1 << pPin);                     // Creamos la máscara para filtrar el bit que queremos utilizar
     uint8_t estadoPinActual = _estadoActual & mascara; // Aplicamos la máscara y guardamos en una nueva variable
     uint8_t estadoPinAnterior = _estadoAnterior & mascara;
 
@@ -118,7 +118,7 @@ int8_t EncoderMultifuncional::detectarFlancos(int8_t pin)
     {
       _estadoAnterior = _estadoActual; // Actualizamos el valor
 
-      if (!(_estadoActual & (1 << pin)) == true)
+      if (!(_estadoActual & (1 << pPin)) == true)
       {
         return _PULSADO;
       }
@@ -137,10 +137,10 @@ int8_t EncoderMultifuncional::detectarFlancos(int8_t pin)
  *
  * @param value Valor que se le asigna
  */
-void EncoderMultifuncional::asignarValor(int16_t value)
+void EncoderMultifuncional::asignarValor(int16_t pValor)
 {
-  if (value > _valorMinimo && value < _valorMaximo)
-    _valorEncoder = value;
+  if (pValor > _valorMinimo && pValor < _valorMaximo)
+    _valorEncoder = pValor;
 }
 
 /**
@@ -149,12 +149,12 @@ void EncoderMultifuncional::asignarValor(int16_t value)
  * @param valorMinimo Valor mínimo del encoder
  * @param valorMaximo Valor máximo del encoder
  */
-void EncoderMultifuncional::cambiarLimites(int16_t valorMinimo, int16_t valorMaximo)
+void EncoderMultifuncional::cambiarLimites(int16_t pValorMinimo, int16_t pValorMaximo)
 {
-  if (valorMinimo != valorMaximo && valorMinimo < valorMaximo)
+  if (pValorMinimo != pValorMaximo && pValorMinimo < pValorMaximo)
   {
-    _valorMinimo = valorMinimo;
-    _valorMaximo = valorMaximo;
+    _valorMinimo = pValorMinimo;
+    _valorMaximo = pValorMaximo;
 
     if (_valorEncoder > _valorMaximo)
       _valorEncoder = _valorMaximo;
@@ -171,16 +171,16 @@ void EncoderMultifuncional::cambiarLimites(int16_t valorMinimo, int16_t valorMax
  * @param valorMaximo Valor máximo del encoder
  * @param valorEncoder Asignamos un valor al encoder. Si esta valor no está dentro de los límites, se establece en el valor mínimo asignado
  */
-void EncoderMultifuncional::cambiarLimites(int16_t valorMinimo, int16_t valorMaximo, int16_t valorEncoder)
+void EncoderMultifuncional::cambiarLimites(int16_t pValorMinimo, int16_t pValorMaximo, int16_t pValorEncoder)
 {
-  if (valorMinimo != valorMaximo && valorMinimo < valorMaximo)
+  if (pValorMinimo != pValorMaximo && pValorMinimo < pValorMaximo)
   {
-    _valorMinimo = valorMinimo;
-    _valorMaximo = valorMaximo;
+    _valorMinimo = pValorMinimo;
+    _valorMaximo = pValorMaximo;
 
-    if (valorEncoder > _valorMinimo && valorEncoder < _valorMaximo)
+    if (pValorEncoder > _valorMinimo && pValorEncoder < _valorMaximo)
     {
-      _valorEncoder = valorEncoder;
+      _valorEncoder = pValorEncoder;
     }
     else
     {
@@ -219,11 +219,11 @@ uint8_t EncoderMultifuncional::_read8()
  * NOTE: Función en prueba. La función anterior está comentada justo debajo
  * @param accion Si es true, se suma el valor
  */
-void EncoderMultifuncional::_cambiarValor(bool accion)
+void EncoderMultifuncional::_cambiarValor(bool pAccion)
 {
   if (_bucle == true)
   {
-    if (accion == _suma)
+    if (pAccion == _suma)
     {
       if (_valorEncoder < _valorMaximo)
       {
@@ -235,7 +235,7 @@ void EncoderMultifuncional::_cambiarValor(bool accion)
       }
     }
 
-    if (accion == _resta)
+    if (pAccion == _resta)
     {
       if (_valorEncoder > _valorMinimo)
       {
@@ -249,12 +249,12 @@ void EncoderMultifuncional::_cambiarValor(bool accion)
   }
   else if (_bucle == false)
   {
-    if (accion == _suma)
+    if (pAccion == _suma)
     {
       if (_valorEncoder < _valorMaximo)
         _valorEncoder++;
     }
-    if (accion == _resta)
+    if (pAccion == _resta)
     {
       if (_valorEncoder > _valorMinimo)
         _valorEncoder--;
@@ -264,14 +264,14 @@ void EncoderMultifuncional::_cambiarValor(bool accion)
 
 /**
  * @brief Función encargada de leer y actualizar los pines del PCF y comprobar el movimiento del encoder
- * 
+ *
  */
 void EncoderMultifuncional::actualizarBits()
 {
   _estadoActual = _read8();
   uint8_t _bitsActuales = _estadoActual & 0b00000011; // Aplicamos una máscara para quedarnos solo con los dos últimos valores (pines CLK y DT)
 
-  if (_bitsActuales != _bitsAnteriores && _lecturaEncoder == true) // Si no está en reposo
+  if (_bitsActuales != _bitsAnteriores) // Si no está en reposo
   {
     _bitsAnteriores = _bitsActuales;
 
@@ -295,11 +295,9 @@ void EncoderMultifuncional::actualizarBits()
   if (_bitsActuales == 0b00000000)
   {
     _reposoEncoder = false;
-    _lecturaEncoder = true;
   }
   else if (_bitsActuales == 0b00000011)
   {
     _reposoEncoder = true;
-    _lecturaEncoder = true;
   }
 }
