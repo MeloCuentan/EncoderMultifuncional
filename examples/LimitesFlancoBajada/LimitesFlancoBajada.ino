@@ -33,10 +33,10 @@ void loop()
     Serial.println(contador);
   }
 
-  // Si el pin está presinoado el pin, lo mostarmos en el monitor serie
+  // Si está presinoado el pin, lo mostarmos en el monitor serie y cambiamos los límites
   if (encoder.esPresionado(PIN_A))
   {
-    encoder.cambiarLimites(0, 100);  // Modificamos los límites de funcionamiento
+    encoder.cambiarLimites(0, 100);  // Cambiamos límites de funcionamiento del encoder
     Serial.println("cambiamos límites de 0 a 100, la posición no");
     Serial.println("cambia si está dentro de los límites");
     Serial.println(F("Pulsado Pin A"));
@@ -45,7 +45,7 @@ void loop()
   if (encoder.esPresionado(PIN_B))
   {
     Serial.println("cambiamos límites de -10 a 10 y asignamo posición a 5");
-    encoder.cambiarLimites(-10, 10, 5);  // Modificamos los límites de funcionamiento y especificamos la posición
+    encoder.cambiarLimites(-10, 10, 5);  // Cambiamos límites de funcionamiento del encoder y asignamos la posición
     Serial.println(F("Pulsado Pin B"));
   }
 
