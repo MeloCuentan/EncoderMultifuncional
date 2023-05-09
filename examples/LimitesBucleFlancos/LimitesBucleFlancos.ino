@@ -7,7 +7,7 @@ int8_t contadorAnterior;
 
 // Creamos objeto del encoder con la dirección que hayamos asignado (0x20 - 0x27)
 
-EncoderMultifuncional encoder(0x20, 0, 10, false); // Dirección I2C del PCF8574, valor mínimo, valor máximo, activamos el bucle
+EncoderMultifuncional encoder(0x20, 0, 10, true); // Dirección I2C del PCF8574, valor mínimo, valor máximo, activamos el bucle con true
 
 void setup()
 {
@@ -26,12 +26,15 @@ void loop()
     contadorAnterior = contador;
     Serial.println(contador);
   }
+  
+  // Creamos variables para guardar el estado de cada pulsador
   uint8_t valorPinA = encoder.detectarFlancos(PIN_A);
   uint8_t valorPinB = encoder.detectarFlancos(PIN_B);
   uint8_t valorPinC = encoder.detectarFlancos(PIN_C);
   uint8_t valorPinD = encoder.detectarFlancos(PIN_D);
   uint8_t valorPinSW = encoder.detectarFlancos(PIN_SW);
 
+  // Si el pulsador es presionado muestra el mensaje en el monitor serie
   if (valorPinA == PRESIONADO)
   {
     Serial.println("El pulsador A se ha presionado");
