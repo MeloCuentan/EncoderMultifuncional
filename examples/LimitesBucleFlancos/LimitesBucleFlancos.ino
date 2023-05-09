@@ -7,7 +7,7 @@ int8_t contadorAnterior;
 
 // Creamos objeto del encoder con la dirección que hayamos asignado (0x20 - 0x27)
 
-EncoderMultifuncional encoder(0x20, 0, 10, true); // Dirección I2C del PCF8574, valor mínimo, valor máximo, activamos el bucle
+EncoderMultifuncional encoder(0x20, 0, 10, false); // Dirección I2C del PCF8574, valor mínimo, valor máximo, activamos el bucle
 
 void setup()
 {
