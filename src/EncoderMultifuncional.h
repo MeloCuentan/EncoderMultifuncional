@@ -19,15 +19,17 @@ public:
   EncoderMultifuncional(uint8_t pDireccion_I2C);
   EncoderMultifuncional(uint8_t pDireccion_I2C, int16_t pValorMinimo, int16_t pValorMaximo);
   EncoderMultifuncional(uint8_t pDireccion_I2C, int16_t pValorMinimo, int16_t pValorMaximo, bool pBucle);
-  void inicializar();
-  void actualizarBits();
+  void inicializar(void);
+  void actualizarBits(void);
   void detectarFlancoBajada(uint8_t pPin);
   void asignarValor(int16_t pValor);
   void cambiarLimites(int16_t pValorMinimo, int16_t pValorMaximo);
   void cambiarLimites(int16_t pValorMinimo, int16_t pValorMaximo, int16_t pValorEncoder);
   bool esPresionado(uint8_t pPin);
+  bool limitePulsado(uint8_t pPin, uint16_t pTiempo, bool pRepeticion = false);
   int8_t detectarFlancos(int8_t pPin);
-  int16_t obtenerValor();
+  int16_t obtenerValor(void);
+  uint16_t medirTiempoPulsado(uint8_t pPin);
 
 private:
   static const uint8_t _TOTAL_PULSADORES = 5; // Total de pulsadores que tiene el encoder
@@ -44,6 +46,11 @@ private:
   int16_t _valorEncoder;   // Valor numérico del encoder
   int16_t _valorMinimo = -32768;    // Valor mínimo de un int16_t
   int16_t _valorMaximo = 32767;     // Valor máximo de un int16_t
+  uint32_t _presionInicioCentral;
+  uint32_t _presionInicioCruz;
+  uint32_t _tiempoInicioPulsador[_TOTAL_PULSADORES];
+  bool _botonPresionadoAnterior[_TOTAL_PULSADORES];
+  bool _botonPresionado[_TOTAL_PULSADORES];
   bool _flancoPines[_TOTAL_PULSADORES] = {
       // Establecemos la detección de todos los flancos como desactivados por defecto
       false, // PIN_A
@@ -57,7 +64,7 @@ private:
   bool _suma = true;                // Suma el valor
   bool _resta = false;              // Resta el valor
   void _cambiarValor(bool pAccion); // Función que cambia el valor del encoder
-  uint8_t _read8();                 // Función para leer todos los pines del PCF
+  uint8_t _read8(void);                 // Función para leer todos los pines del PCF
 };
 
 #endif

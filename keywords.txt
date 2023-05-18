@@ -12,8 +12,10 @@ detectarFlancoBajada    KEYWORD2
 asignarValor            KEYWORD2
 cambiarLimites          KEYWORD2
 esPresionado            KEYWORD2
+limitePulsado           KEYWORD2
 detectarFlancos         KEYWORD2
 obtenerValor            KEYWORD2
+medirTiempoPulsado      KEYWORD2
 
 ##############
 # CONSTANTES #

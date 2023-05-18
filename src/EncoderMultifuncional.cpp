@@ -45,7 +45,7 @@ EncoderMultifuncional::EncoderMultifuncional(uint8_t pDireccion_I2C, int16_t pVa
  * @brief Inicializamos el PCF8574
  *
  */
-void EncoderMultifuncional::inicializar()
+void EncoderMultifuncional::inicializar(void)
 {
   Wire.begin();
   Wire.beginTransmission(_direccion_I2C);
@@ -60,9 +60,10 @@ void EncoderMultifuncional::inicializar()
  * @brief Función encargada de leer y actualizar los pines del PCF y comprobar el movimiento del encoder
  *
  */
-void EncoderMultifuncional::actualizarBits()
+void EncoderMultifuncional::actualizarBits(void)
 {
   _estadoActual = _read8();
+
   uint8_t _bitsActuales = _estadoActual & 0b00000011; // Aplicamos una máscara para quedarnos solo con los dos últimos valores (pines CLK y DT)
 
   if (_bitsActuales != _bitsAnteriores) // Si no está en reposo
@@ -198,6 +199,60 @@ bool EncoderMultifuncional::esPresionado(uint8_t pPin)
 }
 
 /**
+ * @brief Devuelve true si ha pasado el tiempo pulsado en ese pin
+ *
+ * @param pPin Valor del pin (PIN_A, PIN_B, PIN_C, PIN_D, PIN_SW)
+ * @param pTiempo Tiempo de detección presionado
+ * @param pRepeticion Si es true, se repite la pulsación cada pTiempo. Si es false, no repite
+ */
+bool EncoderMultifuncional::limitePulsado(uint8_t pPin, uint16_t pTiempo, bool pRepeticion)
+{
+  static bool _inicioBotonCruz;
+  static bool _inicioBotonSW;
+  uint8_t _ajustePin = pPin - 2;
+  _botonPresionado[_ajustePin] = esPresionado(pPin);
+
+  if (_botonPresionado[_ajustePin] == true && _botonPresionadoAnterior[_ajustePin] == false)
+  {
+    if (_botonPresionado[_ajustePin] == true)
+    {
+      _tiempoInicioPulsador[_ajustePin] = millis();
+
+      if (pPin == PIN_SW)
+        _inicioBotonSW = true;
+      else
+        _inicioBotonCruz = true;
+    }
+  }
+
+  _botonPresionadoAnterior[_ajustePin] = _botonPresionado[_ajustePin];
+
+  if (millis() - _tiempoInicioPulsador[_ajustePin] >= pTiempo && _botonPresionado[_ajustePin] == true)
+  {
+    _tiempoInicioPulsador[_ajustePin] = millis();
+    if (pRepeticion == false)
+    {
+      if (pPin == PIN_SW && _inicioBotonSW == true)
+      {
+        _inicioBotonSW = false;
+        return true;
+      }
+      else if (pPin != PIN_SW && _inicioBotonCruz == true)
+      {
+        _inicioBotonCruz = false;
+        return true;
+      }
+    }
+    else
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/**
  * @brief Detección de cambio de flanco de cada pulsador
  *
  * @param pPin Se le pasará el nombre de pin (PIN_A, PIN_B, PIN_C, PIN_D, PIN_SW)
@@ -234,9 +289,35 @@ int8_t EncoderMultifuncional::detectarFlancos(int8_t pPin)
  *
  * @return int16_t Delvuelve el valor del contador
  */
-int16_t EncoderMultifuncional::obtenerValor()
+int16_t EncoderMultifuncional::obtenerValor(void)
 {
   return _valorEncoder;
+}
+
+/**
+ * @brief Medir el tiempo que se ha pulsado cualquier botón
+ *
+ * @param pPin Valor del pin (PIN_A, PIN_B, PIN_C, PIN_D, PIN_SW)
+ */
+uint16_t EncoderMultifuncional::medirTiempoPulsado(uint8_t pPin)
+{
+  uint16_t _valorTemporal = 0;
+
+  if (pPin >= _VALOR_MINIMO_PIN && pPin <= _VALOR_MAXIMO_PIN)
+  {
+    uint8_t _estadoPinActual = detectarFlancos(pPin);
+
+    if (_estadoPinActual == _PULSADO)
+    {
+      (pPin == PIN_SW) ? (_presionInicioCentral = millis()) : (_presionInicioCruz = millis());
+    }
+    else if (_estadoPinActual == _LIBRE)
+    {
+      (pPin == PIN_SW) ? (_valorTemporal = millis() - _presionInicioCentral) : (_valorTemporal = millis() - _presionInicioCruz);
+    }
+  }
+
+  return _valorTemporal;
 }
 
 /**
@@ -292,7 +373,7 @@ void EncoderMultifuncional::_cambiarValor(bool pAccion)
  *
  * @return uint8_t valor en BIN del estado de los pines
  */
-uint8_t EncoderMultifuncional::_read8()
+uint8_t EncoderMultifuncional::_read8(void)
 {
   Wire.requestFrom(_direccion_I2C, (uint8_t)1);
   uint8_t value = Wire.read();
