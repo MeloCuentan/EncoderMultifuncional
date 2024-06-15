@@ -5,13 +5,13 @@
 #include <Wire.h>
 
 // Asignación del número de los pines que utilizará el usuario
-static const uint8_t PIN_C = 2;      // Pin P4 del PCF8574
-static const uint8_t PIN_D = 3;      // Pin P5 del PCF8574
-static const uint8_t PIN_A = 4;      // Pin P2 del PCF8574
-static const uint8_t PIN_B = 5;      // Pin P3 del PCF8574
-static const uint8_t PIN_SW = 6;     // Pin P6 del PCF8574
-static const uint8_t PRESIONADO = 1; // Valor que devuelve al pulsar el botón
-static const uint8_t LIBERADO = 2;   // Valor que devuelve al soltar el botón
+const uint8_t PIN_C = 2;      // Pin P4 del PCF8574
+const uint8_t PIN_D = 3;      // Pin P5 del PCF8574
+const uint8_t PIN_A = 4;      // Pin P2 del PCF8574
+const uint8_t PIN_B = 5;      // Pin P3 del PCF8574
+const uint8_t PIN_SW = 6;     // Pin P6 del PCF8574
+const uint8_t PRESIONADO = 1; // Valor que devuelve al pulsar el botón
+const uint8_t LIBERADO = 2;   // Valor que devuelve al soltar el botón
 
 class EncoderMultifuncional
 {
