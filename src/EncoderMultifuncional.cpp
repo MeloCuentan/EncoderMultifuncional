@@ -118,7 +118,7 @@ void EncoderMultifuncional::detectarFlancoBajada(uint8_t pPin)
  */
 void EncoderMultifuncional::asignarValor(int16_t pValor)
 {
-  if (pValor > _valorMinimo && pValor < _valorMaximo)
+  if (pValor >= _valorMinimo && pValor <= _valorMaximo)
     _valorEncoder = pValor;
 }
 
